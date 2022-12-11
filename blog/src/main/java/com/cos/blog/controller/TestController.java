@@ -38,7 +38,7 @@ public class TestController {
 	}
 
 	@GetMapping("/user/{id}")
-	public User detail(@PathVariable int id) {
+	public User detail(@PathVariable Long id) {
 		return userRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
 			@Override
 			public IllegalArgumentException get() {
@@ -49,7 +49,7 @@ public class TestController {
 	
 	@Transactional // jap영속성을 이용한 더티체킹 업데이트 방식 / 메소드가 종료되면 transaction이 발동되서 commint을 해주기때문에
 	@PutMapping("/user/{id}")  // save를 따로 해주지 않아도 변경이 됨
-	public User updateUser(@PathVariable int id,@RequestBody User user) { // 업데이트시 파라메타에 id가 없으면 insert
+	public User updateUser(@PathVariable Long id,@RequestBody User user) { // 업데이트시 파라메타에 id가 없으면 insert
 		User checkUser = userRepository.findById(id).orElseThrow(() -> {  // 파라메타에 id가 있고 db에 있으면 update 파라메타에 id가 있지만 db에 없을때 insert
 			return new IllegalArgumentException("수정에 실패하였습니다");
 		});
@@ -67,7 +67,7 @@ public class TestController {
 	}
 	
 	@DeleteMapping("/user/{id}")
-	public String delete(@PathVariable int id) {
+	public String delete(@PathVariable Long id) {
 		try {
 			userRepository.deleteById(id);
 		}catch (Exception e) {

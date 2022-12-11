@@ -1,7 +1,7 @@
 server:
   port: 8000
   servlet:
-    context-path: /blog
+    context-path: /
 
 spring:
   mvc:
@@ -27,4 +27,7 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+      
+cos:
+  key: cos1234
     

@@ -28,8 +28,8 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	@Column(nullable = false, length = 30, unique = true)
+	private Long id;
+	@Column(nullable = false, length = 200, unique = true)
 	private String username;
 	@Column(nullable = false, length = 100)
 	private String password;
@@ -37,6 +37,7 @@ public class User {
 	private String email;
 	@Enumerated(EnumType.STRING)  // DB에는 RoleType타입이 없기때문에 스트링타입이라고 알려줌
 	private RoleType role;  // USER와 ADMIN만 넣을수있도록하는게 좋다
+	private String oauth;  // 카카오나 홈페이지, 구글등 접속 경로
 	@CreationTimestamp
 	private Timestamp createDate;
 
