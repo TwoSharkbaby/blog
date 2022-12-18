@@ -2,9 +2,11 @@ package com.naver.www.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +38,7 @@ public class UserController {  // 원래 할때는 서비스에서하고 오류�
 	}
 	
 	@PostMapping("/user")
-	public CommonDto save(@RequestBody JoinReqDto dto) {
+	public CommonDto<?> save(@Valid @RequestBody JoinReqDto dto, BindingResult bindingResult) {
 		userRepository.save(dto);
 		return new CommonDto<>(HttpStatus.CREATED.value());
 	}
@@ -55,7 +57,7 @@ public class UserController {  // 원래 할때는 서비스에서하고 오류�
 	}
 	
 	@PutMapping("/user/{id}")
-	public CommonDto update(@PathVariable int id, @RequestBody UpdateReqDto dto) {
+	public CommonDto<?> update(@PathVariable int id, @Valid @RequestBody UpdateReqDto dto, BindingResult bindingResult) {
 		userRepository.update(id, dto);
 		return new CommonDto<>(HttpStatus.OK.value());
 	}

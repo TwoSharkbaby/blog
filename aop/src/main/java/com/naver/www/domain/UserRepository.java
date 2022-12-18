@@ -29,6 +29,7 @@ public class UserRepository {
 	}
 	
 	public void update(int id, UpdateReqDto dto) {
-		throw new IllegalArgumentException("오마니 아바지");
+	//	throw new IllegalArgumentException("오마니 아바지");
+		System.out.println("DB에 UPDATE됨");
 	}
 }

@@ -1,0 +1,5 @@
+[2022-12-18 15:38:16:691137][http-nio-8080-exec-2] WARN  com.naver.www.config.BindingAdvice - com.naver.www.web.UserController.save()=>필드:username,메세지:유저네임을 입력하세요.
+[2022-12-18 16:00:19:7333][http-nio-8080-exec-1] WARN  com.naver.www.config.BindingAdvice - com.naver.www.web.UserController.save()=>필드:username,메세지:유저네임을 입력하세요.
+[2022-12-18 16:12:27:735223][http-nio-8080-exec-2] WARN  com.naver.www.config.BindingAdvice - com.naver.www.web.UserController.save()=>필드:username,메세지:유저네임을 입력하세요.
+[2022-12-18 16:28:33:1701982][http-nio-8080-exec-2] WARN  com.naver.www.config.BindingAdvice - com.naver.www.web.UserController.save()=>필드:username,메세지:유저네임을 입력하세요.
+[2022-12-18 16:31:26:1874536][http-nio-8080-exec-2] WARN  com.naver.www.config.BindingAdvice - com.naver.www.web.UserController.save()=>필드:username,메세지:유저네임을 입력하세요.
