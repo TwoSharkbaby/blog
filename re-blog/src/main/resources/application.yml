@@ -1,6 +1,38 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    
 spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+      
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3305/blog?serverTimezone=Asia/Seoul
     username: blog
     password: sql123456
+    
+  jpa:
+    open-in-view: true # FetchType.LAZY 사용할려면 true 컨트롤러 시작과 끝에서 영속성 컨텐츠가 열리고 닫힘
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # Entity 변수명을 그대로 사용해서 컬럼만듬
+      use-new-id-generator-mappings: false # JAP넘버링 전략을 사용하지 않음
+    show-sql: true # Console 창에 쿼리문 보여줌
+    properties:
+      hibernate.format_sql: true # Console 창에 쿼리문 이쁘게 해줌
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+      
+cos:
+  key: cos1234

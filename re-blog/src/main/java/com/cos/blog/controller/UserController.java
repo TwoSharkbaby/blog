@@ -1,5 +1,6 @@
 package com.cos.blog.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.cos.blog.config.auth.PrincipalDetailService;
@@ -54,49 +56,53 @@ public class UserController {
 	}
 	
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallBack(String code) {
-		RestTemplate rt = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();  // http header 오브젝트 생성
+	public String kakaoCallback(String code) {
+		RestTemplate rt = new RestTemplate(); // http rest 메서드 생성
+		
+		HttpHeaders headers = new HttpHeaders(); // 해더 생성
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // http body 오브젝트 생성
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 바디 생성
 		params.add("grant_type", "authorization_code");
-		params.add("client_id", "68114e2f495b7d88ffc76ef4fe63f1d2");
-		params.add("redirect_uri", "http://localhost:8000/auth/kakao/callback");
+		params.add("client_id", "1eb3f873da90b74d1341e933e7988121");
+		params.add("redirect_uri", "http://localhost:9000/auth/kakao/callback");
 		params.add("code", code);
 		
-		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers);  // header와 body 합치기
+		HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(params, headers); // 해더 바디 담기
 		
-		ResponseEntity<String> response = rt.exchange(  // http post방식으로 요청하고 response 변수의 응답을 받음
+		ResponseEntity<String> response = rt.exchange(  // post 요청
 				"https://kauth.kakao.com/oauth/token", HttpMethod.POST, kakaoTokenRequest, String.class);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthToken oauthToken = null;
+		OAuthToken oAuthToken = null;
+		
 		try {
-			oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
-		} catch (JsonMappingException e) {  // 이름 오류 예외처리
+			oAuthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
+		} catch (JsonMappingException e) {
 			e.printStackTrace();
-		} catch (JsonProcessingException e) {  // get set 미등록 예외처리
+		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 		
-		RestTemplate rt2 = new RestTemplate();
-		HttpHeaders headers2 = new HttpHeaders();  // http header 오브젝트 생성
-		headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+		RestTemplate rt2 = new RestTemplate(); // http rest 메서드 생성
+		
+		HttpHeaders headers2 = new HttpHeaders(); // 해더 생성
+		headers2.add("Authorization", "Bearer "+oAuthToken.getAccess_token());
 		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 		
-		HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers2);  // header와 body 합치기
+		HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers2); // 해더 바디 담기
 		
-		ResponseEntity<String> response2 = rt2.exchange(  // http post방식으로 요청하고 response 변수의 응답을 받음
+		ResponseEntity<String> response2 = rt2.exchange(  // post 요청
 				"https://kapi.kakao.com/v2/user/me", HttpMethod.POST, kakaoProfileRequest, String.class);
 		
 		ObjectMapper objectMapper2 = new ObjectMapper();
-		KakaoProfile kakaoProfile  = null;
+		KakaoProfile kakaoProfile = null;
+		
 		try {
 			kakaoProfile = objectMapper2.readValue(response2.getBody(), KakaoProfile.class);
-		} catch (JsonMappingException e) {  // 이름 오류 예외처리
+		} catch (JsonMappingException e) {
 			e.printStackTrace();
-		} catch (JsonProcessingException e) {  // get set 미등록 예외처리
+		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 		
@@ -107,7 +113,7 @@ public class UserController {
 		
 		if(originUser.getUsername() == null) {
 			System.out.println("회원가입을 진행합니다");
-			userService.signUp(kakaoUser);
+			userService.joinForm(kakaoUser);
 		} else {
 			System.out.println("기존회원입니다 자동로그인하겠습니다");
 			UserDetails userDetails = principalDetailService.loadUserByUsername(originUser.getUsername());
@@ -118,4 +124,6 @@ public class UserController {
 		
 		return "redirect:/";
 	}
+	
+	
 }
